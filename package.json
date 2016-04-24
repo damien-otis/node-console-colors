@@ -1,0 +1,16 @@
+{
+  "name": "console-colors",
+  "version": "1.0.0",
+  "description": "ANSI colors for your node console",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "ANSI",
+    "color"
+  ],
+  "author": "Damien Otis",
+  "license": "ISC"
+}
