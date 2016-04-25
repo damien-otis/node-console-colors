@@ -1,12 +1,14 @@
+
 var to_export = {
-  list : listColors,
-  set  : setColors
+  list            : listColors,
+  set             : setColors,
+  console_colors  : console_colors
 }
 
 //--------------------------------------------------------------------------------------
 //Only support colors and codes that are common to all platforms.
+
 var isWin = /^win/.test(process.platform);
-console.log("isWin",isWin)
 
 var console_colors = [
   {
@@ -106,6 +108,25 @@ var console_colors = [
     formatting: "\033[37m"
   },
   {
+    code: "\033[100m",
+    type: "bg",
+    name: "dark gray"
+  },
+  {
+    code: "\033[47m",
+    formatting: "\033[30m",
+    type: "bg",
+    name: "gray",
+    formatting: "\033[30m"
+  },
+  {
+    code: "\033[107m",
+    type: "bg",
+    name: "white",
+    formatting: "\033[30m"
+  },
+
+  {
     code: "\033[41m",
     type: "bg",
     name: "dark red",
@@ -171,24 +192,6 @@ var console_colors = [
     name: "cyan",
     formatting: "\033[30m"
   },
-  {
-    code: "\033[100m",
-    type: "bg",
-    name: "dark gray"
-  },
-  {
-    code: "\033[47m",
-    formatting: "\033[30m",
-    type: "bg",
-    name: "gray",
-    formatting: "\033[30m"
-  },
-  {
-    code: "\033[107m",
-    type: "bg",
-    name: "white",
-    formatting: "\033[30m"
-  },
 
   {
     code: "\033[49m",
@@ -215,6 +218,7 @@ var console_colors = [
 
 
 //-----------------------------------------
+
 function listColors(){
 /*
 List the color codes available to color console.log statements.
@@ -239,12 +243,10 @@ List the color codes available to color console.log statements.
     console.log(to_export.reset + "  ", (cc.norender ? "" : cc.code) + (cc.formatting ? cc.formatting : "") + cc.c_text + to_export.reset + tabs + ": "+cc.codename)
   }
 
-
-
-
   console.log(to_export.reset)
-
 }
+
+//-----------------------------------------
 
 function setColors(){
   var colors = []
@@ -253,5 +255,7 @@ function setColors(){
   }
   return colors.join("") + arguments[arguments.length-1] + to_export.reset
 }
+
+//-----------------------------------------
 
 module.exports = to_export;
