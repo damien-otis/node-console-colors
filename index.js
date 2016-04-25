@@ -10,18 +10,29 @@ console.log("isWin",isWin)
 
 var console_colors = [
   {
-    code: "\033[90;21m",
+    code: isWin ? "\033[90;21m" : "\033[39m",
     formatting: "\033[107m",
     type: "fg",
     name: "black"
   },
   {
-    code: "\033[30m",
+    code: isWin ? "\033[30m" : "\033[90m",
+    type: "fg",
+    name: "dark gray"
+  },
+  {
+    code: isWin ? "\033[37;21m" : "\033[37m",
     type: "fg",
     name: "gray"
   },
   {
-    code: "\033[31;21m",
+    code: "\033[97m",
+    formatting: "\033[40m",
+    type: "fg",
+    name: "white"
+  },
+  {
+    code: isWin ? "\033[31;21m" : "\033[31m",
     type: "fg",
     name: "dark red"
   },
@@ -31,27 +42,28 @@ var console_colors = [
     name: "red"
   },
   {
-    code: "\033[33m",
+    code: isWin ? "\033[33;21m" : "\033[33m",
     type: "fg",
     name: "dark yellow"
   },
   {
     code: "\033[93m",
+    formatting: "\033[40m",
     type: "fg",
     name: "yellow"
   },
   {
-    code: "\033[96m",
+    code: isWin ? "\033[36;21m" : "\033[36m",
     type: "fg",
     name: "dark cyan"
   },
   {
-    code: "\033[36m",
+    code: "\033[96m",
     type: "fg",
     name: "cyan"
   },
   {
-    code: "\033[32m",
+    code: isWin ? "\033[32;21m" : "\033[32m",
     type: "fg",
     name: "dark green"
   },
@@ -61,7 +73,7 @@ var console_colors = [
     name: "green"
   },
   {
-    code: "\033[34m",
+    code: isWin ? "\033[34;21m" : "\033[34m",
     type: "fg",
     name: "dark blue"
   },
@@ -71,7 +83,7 @@ var console_colors = [
     name: "blue"
   },
   {
-    code: "\033[35m",
+    code: isWin ? "\033[35;21m" : "\033[35m",
     type: "fg",
     name: "dark purple"
   },
@@ -79,17 +91,6 @@ var console_colors = [
     code: "\033[95m",
     type: "fg",
     name: "purple"
-  },
-  {
-    code: "\033[37m",
-    type: "fg",
-    name: "gray"
-  },
-  {
-    code: "\033[97m",
-    formatting: "\033[40m",
-    type: "fg",
-    name: "white"
   },
   {
     code: "\033[39m",
@@ -194,57 +195,12 @@ var console_colors = [
     type: "bg",
     name: "default"
   },
+
   {
-    code: "\033[22m",
-    type: "fg",
-    name: "unbold"
-  },
-  {
-  //  name: "reset\033[0m              : cc_reset",
     code: "\033[0m",
     name: "reset"
   }
 
-
-/* OSX Only
-
-  {
-    name: "blink\033[0m             : cc_blink",
-    code:  "\033[5m",
-    name: "cc_blink"
-  },
-*/
-/* OSX Only
-
-  {
-    //name: "bold\033[0m               : cc_bold",
-    code:  "\033[1m",
-    name: "bold"
-  },
-*/
-/* OSX Only
-  {
-    name: "underscore\033[0m        : cc_underscore",
-    code:  "\033[4m",
-    name: "cc_underscore"
-  },
-*/
-/* OSX Only
-
-  {
-    //name: "clear line         : cc_clearline",
-    code: "\033[2K",
-    name: "clearline",
-    norender:true
-  },
-
-  {
-//    name: "clear display      : cc_cleardisplay",
-    code: "\033[2J",
-    name: "cleardisplay",
-    norender:true
-  }
-*/
 
 ];
 
@@ -269,7 +225,7 @@ List the color codes available to color console.log statements.
   var max_length = 0;
   for (var i=0;i<console_colors.length;i++){
     var cc = console_colors[i];
-    cc.codename = "cc_" + (cc.type ? cc.type+"_" : "") + (cc.name.replace(/\s/g,"_"));
+    cc.codename = (cc.type ? cc.type+"_" : "") + (cc.name.replace(/\s/g,"_"));
     cc.c_text = (cc.type === "fg" ? "foreground " : cc.type === "bg" ? "background " : "") + (cc.name.replace(/\s/g,"_"));
     if (cc.c_text.length > max_length){max_length = cc.c_text.length}
   }
@@ -280,7 +236,7 @@ List the color codes available to color console.log statements.
     var tabs_len  = (max_length - Math.floor(cc.c_text.length));
     var tabs      = " ".repeat( tabs_len+1 );
 
-    console.log("  ", (cc.norender ? "" : cc.code) + (cc.formatting ? cc.formatting : "") + cc.c_text + to_export.reset + tabs + ": "+cc.codename)
+    console.log(to_export.reset + "  ", (cc.norender ? "" : cc.code) + (cc.formatting ? cc.formatting : "") + cc.c_text + to_export.reset + tabs + ": "+cc.codename)
   }
 
 
