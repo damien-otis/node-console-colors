@@ -1,5 +1,5 @@
 {
-  "name": "console-colors",
+  "name": "node-console-colors",
   "version": "1.0.0",
   "description": "ANSI colors for your node console",
   "main": "index.js",
