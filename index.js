@@ -257,5 +257,18 @@ function setColors(){
 }
 
 //-----------------------------------------
+var gulp
+try{
+	gulp = require("gulp")
+
+	if (gulp && gulp.task){
+		gulp.task('listcolors',function(){
+	/*
+	List the color codes available to color console.log statements.
+	*/
+	  	listColors();
+		})
+	}
+}catch(e){}
 
 module.exports = to_export;
