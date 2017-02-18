@@ -23,3 +23,6 @@ This will list the colors and color codes to the console (shown as a gulp task):
 gulp.task("listcolors",function(){
   cc.list()
 })
+
+
+![alt tag](http://damieno.com/github/images/console_colors.png)
