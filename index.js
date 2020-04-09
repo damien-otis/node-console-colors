@@ -9,16 +9,17 @@ var to_export = {
 //Only support colors and codes that are common to all platforms.
 
 var isWin = /^win/.test(process.platform);
+var isLinux = /^linux/.test(process.platform);
 
 var console_colors = [
   {
-    code: isWin ? "\033[90;21m" : "\033[39m",
-    formatting: "\033[107m",
+    code: isWin ? "\033[90;21m" : isLinux ? "\033[3m" : "\033[39m",
+    formatting: isLinux ? "\033[47m" : "\033[107m",
     type: "fg",
     name: "black"
   },
   {
-    code: isWin ? "\033[30m" : "\033[90m",
+    code: isWin ? "\033[38;5;240m" : "\033[90m",
     type: "fg",
     name: "dark gray"
   },
@@ -29,7 +30,7 @@ var console_colors = [
   },
   {
     code: "\033[97m",
-    formatting: "\033[40m",
+    formatting: isLinux ? "\033[37;1m" : "\033[40m",
     type: "fg",
     name: "white"
   },
@@ -39,7 +40,7 @@ var console_colors = [
     name: "dark red"
   },
   {
-    code: "\033[91m",
+    code: isLinux ? "\033[31;1m" : "\033[91m",
     type: "fg",
     name: "red"
   },
@@ -49,7 +50,7 @@ var console_colors = [
     name: "dark yellow"
   },
   {
-    code: "\033[93m",
+    code: isLinux ? "\033[33;1m" : "\033[93m",
     formatting: "\033[40m",
     type: "fg",
     name: "yellow"
@@ -60,7 +61,7 @@ var console_colors = [
     name: "dark cyan"
   },
   {
-    code: "\033[96m",
+    code: isLinux ? "\033[36;1m" : "\033[96m",
     type: "fg",
     name: "cyan"
   },
@@ -70,7 +71,7 @@ var console_colors = [
     name: "dark green"
   },
   {
-    code:"\033[92m",
+    code: isLinux ? "\033[32;1m" : "\033[92m",
     type: "fg",
     name: "green"
   },
@@ -80,7 +81,7 @@ var console_colors = [
     name: "dark blue"
   },
   {
-    code: "\033[94m",
+    code: isLinux ? "\033[34;1m" : "\033[94m",
     type: "fg",
     name: "blue"
   },
@@ -90,12 +91,12 @@ var console_colors = [
     name: "dark purple"
   },
   {
-    code: "\033[95m",
+    code: isLinux ? "\033[35;1m" : "\033[95m",
     type: "fg",
     name: "purple"
   },
   {
-    code: "\033[39m",
+    code: isLinux ? "\033[0m" : "\033[39m",
     type: "fg",
     name: "default"
   },
@@ -108,26 +109,26 @@ var console_colors = [
     formatting: "\033[37m"
   },
   {
-    code: "\033[100m",
+    code: "\033[48;5;240m",
     type: "bg",
     name: "dark gray"
   },
   {
-    code: "\033[47m",
+    code: isLinux ? "\033[47;1m" : "\033[47m",
     formatting: "\033[30m",
     type: "bg",
     name: "gray",
     formatting: "\033[30m"
   },
   {
-    code: "\033[107m",
+    code:  isLinux ? "\033[47;1m" : "\033[48;5;15m",
     type: "bg",
     name: "white",
     formatting: "\033[30m"
   },
 
   {
-    code: "\033[41m",
+    code: isLinux ? "\033[41;1m" : "\033[41m",
     type: "bg",
     name: "dark red",
     formatting:"\033[37m"
@@ -140,10 +141,11 @@ var console_colors = [
   {
     code: "\033[43m",
     type: "bg",
-    name: "dark yellow"
+    name: "dark yellow",
+		formatting: "\033[38;5;15m"
   },
   {
-    code: "\033[103m",
+    code: isLinux ? "\033[43;1m" : "\033[103m",
     type: "bg",
     name: "yellow",
     formatting: "\033[30m"
@@ -151,10 +153,11 @@ var console_colors = [
   {
     code: "\033[42m",
     type: "bg",
-    name: "dark green"
+    name: "dark green",
+		formatting: "\033[38;5;15m"
   },
   {
-    code: "\033[102m",
+    code: isLinux ? "\033[42;1m" : "\033[102m",
     type: "bg",
     name: "green",
     formatting: "\033[30m"
@@ -163,10 +166,10 @@ var console_colors = [
     code: "\033[44m",
     type: "bg",
     name: "dark blue",
-    formatting: "\033[37m"
+		formatting: "\033[38;5;15m"
   },
   {
-    code: "\033[104m",
+    code: isLinux ? "\033[44;1m" : "\033[104m",
     type: "bg",
     name: "blue",
     formatting: "\033[37m"
@@ -174,20 +177,22 @@ var console_colors = [
   {
     code: "\033[45m",
     type: "bg",
-    name: "dark purple"
+    name: "dark purple",
+		formatting: "\033[38;5;15m"
   },
   {
-    code: "\033[105m",
+    code: isLinux ? "\033[45;1m" : "\033[105m",
     type: "bg",
     name: "purple"
   },
   {
     code: "\033[46m",
     type: "bg",
-    name: "dark cyan"
+    name: "dark cyan",
+		formatting: "\033[38;5;15m"
   },
   {
-    code: "\033[106m",
+    code: isLinux ? "\033[46;1m" : "\033[106m",
     type: "bg",
     name: "cyan",
     formatting: "\033[30m"
@@ -270,5 +275,9 @@ try{
 		})
 	}
 }catch(e){}
+
+if (process.argv.indexOf('--LISTCOLORS')!==-1) {
+	listColors();
+}
 
 module.exports = to_export;
