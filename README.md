@@ -25,4 +25,4 @@ gulp.task("listcolors",function(){
 })
 
 
-![alt tag](http://dmtmix.com/imghit/getImage.asp?img=console_colors.png)
+![alt tag](https://dmtmix.com/dnetAPI/getImage/console_colors.png)
