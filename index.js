@@ -18,20 +18,22 @@ const console_colors = [
 		list_bg: 'bg_white'
   },
   {
-    fg: 90,
-		fg_formatting: 107,
-		bg: 100,
-    name: "dark gray"
+    fg: isLinux ? 30 : 90,
+		list_fg: 'fg_black',
+		bg: isLinux ? 47 : 100,
+    name: "dark gray",
+		set: isLinux ? 1 : 0
   },
   {
-    fg: 37,
+    fg: isLinux ? 30 : 37,
 		bg: 47,
     name: "gray",
-		list_fg: 'fg_black'
+		list_fg: 'fg_black',
+		set: isLinux ? 1 : 0
   },
   {
     fg: 97,
-		bg: 107,
+		bg: isLinux ? 47 : 107,
     name: "white",
 		list_fg: 'fg_black'
   },
@@ -41,9 +43,10 @@ const console_colors = [
     name: "dark red"
   },
   {
-    fg: 91,
-		bg: 101,
-    name: "red"
+    fg: isLinux ? 31 : 91,
+		bg: isLinux ? 41 : 101,
+    name: "red",
+		set: isLinux ? 1 : 0
   },
   {
     fg: 33,
@@ -52,10 +55,11 @@ const console_colors = [
 		list_fg: 'fg_black'
   },
   {
-    fg: 93,
-		bg: 103,
+    fg: isLinux ? 33 : 93,
+		bg: isLinux ? 43 : 103,
     name: "yellow",
-		list_fg: 'fg_black'
+		list_fg: 'fg_black',
+		set: isLinux ? 1 : 0
   },
   {
     fg: 36,
@@ -64,10 +68,11 @@ const console_colors = [
 		list_fg: 'fg_black'
   },
   {
-    fg: 96,
-		bg: 106,
+    fg: isLinux ? 36 : 96,
+		bg: isLinux ? 46 : 106,
     name: "cyan",
-		list_fg: 'fg_black'
+		list_fg: 'fg_black',
+		set: isLinux ? 1 : 0
   },
   {
     fg: 32,
@@ -76,21 +81,22 @@ const console_colors = [
 		list_fg: 'fg_black'
   },
   {
-    fg: 92,
-		bg: 102,
+    fg: isLinux ? 32 : 92,
+		bg: isLinux ? 42 : 102,
     name: "green",
-		list_fg: 'fg_black'
+		list_fg: 'fg_black',
+		set: isLinux ? 1 : 0
   },
   {
     fg: 34,
 		bg: 44,
-    name: "dark blue",
-		list_bg: 'bg_dark_gray'
+    name: "dark blue"
   },
   {
-    fg: 94,
-		bg: 104,
-    name: "blue"
+    fg: isLinux ? 34 : 94,
+		bg: isLinux ? 44 : 104,
+    name: "blue",
+		set: isLinux ? 1 : 0
   },
   {
     fg: 35,
@@ -98,9 +104,10 @@ const console_colors = [
     name: "dark purple"
   },
   {
-    fg: 95,
-		bg: 105,
-    name: "purple"
+    fg: isLinux ? 35 : 95,
+		bg: isLinux ? 45 : 105,
+    name: "purple",
+		set: isLinux ? 1 : 0
   },
   {
     fg: 39,
@@ -127,6 +134,7 @@ for (var i=0;i<console_colors.length;i++){
 	}
 	if (cc.fg) {to_export[`fg_${name}`] = cc.fg}
 	if (cc.bg) {to_export[`bg_${name}`] = cc.bg}
+	if (cc.set) {to_export[`set_fg_${name}`] = cc.set}
 }
 
 //-----------------------------------------
@@ -149,20 +157,20 @@ List the color codes available to color console.log statements.
 		}
     let fg_name = `fg_${cc.name.replace(/\s/g,"_")}`;
 		let bg_name = `bg_${cc.name.replace(/\s/g,"_")}`;
- 
+
 		const fg_text = `Foreground ${cc.name}`;
 		const bg_text = `Background ${cc.name}`;
 
 		max_length = Math.max(max_length, fg_text.length, bg_text.length);
 
     fg_lines.push({
-			name:fg_name, 
+			name:fg_name,
 			text: fg_text,
 			colored: cc.list_bg ? setColors(cc.list_bg, fg_name, fg_text) : setColors(fg_name, fg_text)
 		});
 
 		bg_lines.push({
-			name: bg_name, 
+			name: bg_name,
 			text: bg_text,
 			colored: cc.list_fg ? setColors(cc.list_fg, bg_name, bg_text) : setColors(bg_name, bg_text)
 		});
@@ -205,11 +213,11 @@ function setColors(...argu){
 	}).filter(s => {
 		return !!s;
 	}).join(' ');
-	
-	const set = '0';
+
+	const set = to_export[`set_${fg_color}`] ? to_export[`set_${fg_color}`] : 0 ;
 
 	const colors = `\u001b[${set ? set + ';' : ''}${fg_color ? to_export[fg_color] + (bg_color ? ';' : '') : ''}${bg_color ? to_export[bg_color]  : ''}m`
-	
+
   return colors + text + `\u001b[${to_export.reset}m`;
 }
 
