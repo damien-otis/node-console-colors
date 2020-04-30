@@ -3,9 +3,6 @@ const to_export = {
   set             : setColors,
 }
 
-//--------------------------------------------------------------------------------------
-//Only support colors and codes that are common to all platforms.
-
 const isLinux = /^linux/.test(process.platform);
 
 const console_colors = [
@@ -222,7 +219,7 @@ function setColors(...argu){
 
 //-----------------------------------------
 
-if (process.argv.indexOf('--LISTCOLORS')!==-1) {
+if (!module.parent) {
 	listColors();
 }
 

@@ -18,7 +18,7 @@ console.log(cc.set("fg_green", "bg_dark_grey", "Hello World", "in fg_green and b
 
 To list all the colors:
 
-    node ./node_modules/node-console-colors/index.js --LISTCOLORS
+    node ./node_modules/node-console-colors/index.js
 
 Known issues:
 
