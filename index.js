@@ -6,7 +6,6 @@ const to_export = {
 //--------------------------------------------------------------------------------------
 //Only support colors and codes that are common to all platforms.
 
-const isWin = /^win/.test(process.platform);
 const isLinux = /^linux/.test(process.platform);
 
 const console_colors = [
