@@ -8,24 +8,19 @@ npm install --save console-colors
 Usage:
 
 
-global.cc = require("node-console-colors");
+const cc = require("node-console-colors");
 
-console.log(cc.set("fg_red","Hello World in red"))
+console.log(cc.set("fg_red", "Hello World in red"))
 
-console.log(cc.set("fg_blue","Hello World in blue"))
+console.log(cc.set("fg_blue", "Hello World in blue"))
 
-console.log(cc.set("fg_green","bg_dark_grey","Hello World", "in fg_green and bg_dark_gray"))
+console.log(cc.set("fg_green", "bg_dark_grey", "Hello World", "in fg_green and bg_dark_gray"))
 
-
-To list all the colors, 
-
-    node index.js --LISTCOLORS
-
-Or if you have installed it as a dependency:
+To list all the colors:
 
     node ./node_modules/node-console-colors/index.js --LISTCOLORS
 
-Known issues: 
+Known issues:
 
 Windows, OSX, and MinGW/Msys32 will show all colors, but Linux may show fewer colors.
 

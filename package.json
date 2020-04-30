@@ -10,7 +10,8 @@
   "keywords": [
     "nodejs",
     "ANSI",
-    "color"
+    "color",
+		"console"
   ],
   "author": "Damien Otis",
   "license": "ISC"
