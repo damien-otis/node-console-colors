@@ -1,226 +1,140 @@
-
-var to_export = {
+const to_export = {
   list            : listColors,
   set             : setColors,
-  console_colors  : console_colors
 }
 
 //--------------------------------------------------------------------------------------
 //Only support colors and codes that are common to all platforms.
 
-var isWin = /^win/.test(process.platform);
-var isLinux = /^linux/.test(process.platform);
+const isLinux = /^linux/.test(process.platform);
 
-var console_colors = [
+const console_colors = [
   {
-    code: isWin ? "\033[90;21m" : isLinux ? "\033[3m" : "\033[39m",
-    formatting: isLinux ? "\033[47m" : "\033[107m",
-    type: "fg",
-    name: "black"
+    fg: 30,
+    fg_formatting: 107,
+		bg: 40,
+    name: "black",
+		list_bg: 'bg_white'
   },
   {
-    code: isWin ? "\033[38;5;240m" : "\033[90m",
-    type: "fg",
-    name: "dark gray"
+    fg: isLinux ? 30 : 90,
+		list_fg: 'fg_black',
+		bg: isLinux ? 47 : 100,
+    name: "dark gray",
+		set: isLinux ? 1 : 0
   },
   {
-    code: isWin ? "\033[37;21m" : "\033[37m",
-    type: "fg",
-    name: "gray"
+    fg: isLinux ? 30 : 37,
+		bg: 47,
+    name: "gray",
+		list_fg: 'fg_black',
+		set: isLinux ? 1 : 0
   },
   {
-    code: "\033[97m",
-    formatting: isLinux ? "\033[37;1m" : "\033[40m",
-    type: "fg",
-    name: "white"
+    fg: 97,
+		bg: isLinux ? 47 : 107,
+    name: "white",
+		list_fg: 'fg_black'
   },
   {
-    code: isWin ? "\033[31;21m" : "\033[31m",
-    type: "fg",
+    fg: 31,
+		bg: 41,
     name: "dark red"
   },
   {
-    code: isLinux ? "\033[31;1m" : "\033[91m",
-    type: "fg",
-    name: "red"
+    fg: isLinux ? 31 : 91,
+		bg: isLinux ? 41 : 101,
+    name: "red",
+		set: isLinux ? 1 : 0
   },
   {
-    code: isWin ? "\033[33;21m" : "\033[33m",
-    type: "fg",
-    name: "dark yellow"
+    fg: 33,
+		bg: 43,
+    name: "dark yellow",
+		list_fg: 'fg_black'
   },
   {
-    code: isLinux ? "\033[33;1m" : "\033[93m",
-    formatting: "\033[40m",
-    type: "fg",
-    name: "yellow"
+    fg: isLinux ? 33 : 93,
+		bg: isLinux ? 43 : 103,
+    name: "yellow",
+		list_fg: 'fg_black',
+		set: isLinux ? 1 : 0
   },
   {
-    code: isWin ? "\033[36;21m" : "\033[36m",
-    type: "fg",
-    name: "dark cyan"
+    fg: 36,
+		bg: 46,
+    name: "dark cyan",
+		list_fg: 'fg_black'
   },
   {
-    code: isLinux ? "\033[36;1m" : "\033[96m",
-    type: "fg",
-    name: "cyan"
+    fg: isLinux ? 36 : 96,
+		bg: isLinux ? 46 : 106,
+    name: "cyan",
+		list_fg: 'fg_black',
+		set: isLinux ? 1 : 0
   },
   {
-    code: isWin ? "\033[32;21m" : "\033[32m",
-    type: "fg",
-    name: "dark green"
+    fg: 32,
+		bg: 42,
+    name: "dark green",
+		list_fg: 'fg_black'
   },
   {
-    code: isLinux ? "\033[32;1m" : "\033[92m",
-    type: "fg",
-    name: "green"
+    fg: isLinux ? 32 : 92,
+		bg: isLinux ? 42 : 102,
+    name: "green",
+		list_fg: 'fg_black',
+		set: isLinux ? 1 : 0
   },
   {
-    code: isWin ? "\033[34;21m" : "\033[34m",
-    type: "fg",
+    fg: 34,
+		bg: 44,
     name: "dark blue"
   },
   {
-    code: isLinux ? "\033[34;1m" : "\033[94m",
-    type: "fg",
-    name: "blue"
+    fg: isLinux ? 34 : 94,
+		bg: isLinux ? 44 : 104,
+    name: "blue",
+		set: isLinux ? 1 : 0
   },
   {
-    code: isWin ? "\033[35;21m" : "\033[35m",
-    type: "fg",
+    fg: 35,
+		bg: 45,
     name: "dark purple"
   },
   {
-    code: isLinux ? "\033[35;1m" : "\033[95m",
-    type: "fg",
-    name: "purple"
+    fg: isLinux ? 35 : 95,
+		bg: isLinux ? 45 : 105,
+    name: "purple",
+		set: isLinux ? 1 : 0
   },
   {
-    code: isLinux ? "\033[0m" : "\033[39m",
-    type: "fg",
+    fg: 39,
+		bg: 49,
     name: "default"
   },
-
-
   {
-    code: "\033[40m",
-    type: "bg",
-    name: "black",
-    formatting: "\033[37m"
-  },
-  {
-    code: "\033[48;5;240m",
-    type: "bg",
-    name: "dark gray"
-  },
-  {
-    code: isLinux ? "\033[47;1m" : "\033[47m",
-    formatting: "\033[30m",
-    type: "bg",
-    name: "gray",
-    formatting: "\033[30m"
-  },
-  {
-    code:  isLinux ? "\033[47;1m" : "\033[48;5;15m",
-    type: "bg",
-    name: "white",
-    formatting: "\033[30m"
-  },
-
-  {
-    code: isLinux ? "\033[41;1m" : "\033[41m",
-    type: "bg",
-    name: "dark red",
-    formatting:"\033[37m"
-  },
-  {
-    code: "\033[101m",
-    type: "bg",
-    name: "red",
-  },
-  {
-    code: "\033[43m",
-    type: "bg",
-    name: "dark yellow",
-		formatting: "\033[38;5;15m"
-  },
-  {
-    code: isLinux ? "\033[43;1m" : "\033[103m",
-    type: "bg",
-    name: "yellow",
-    formatting: "\033[30m"
-  },
-  {
-    code: "\033[42m",
-    type: "bg",
-    name: "dark green",
-		formatting: "\033[38;5;15m"
-  },
-  {
-    code: isLinux ? "\033[42;1m" : "\033[102m",
-    type: "bg",
-    name: "green",
-    formatting: "\033[30m"
-  },
-  {
-    code: "\033[44m",
-    type: "bg",
-    name: "dark blue",
-		formatting: "\033[38;5;15m"
-  },
-  {
-    code: isLinux ? "\033[44;1m" : "\033[104m",
-    type: "bg",
-    name: "blue",
-    formatting: "\033[37m"
-  },
-  {
-    code: "\033[45m",
-    type: "bg",
-    name: "dark purple",
-		formatting: "\033[38;5;15m"
-  },
-  {
-    code: isLinux ? "\033[45;1m" : "\033[105m",
-    type: "bg",
-    name: "purple"
-  },
-  {
-    code: "\033[46m",
-    type: "bg",
-    name: "dark cyan",
-		formatting: "\033[38;5;15m"
-  },
-  {
-    code: isLinux ? "\033[46;1m" : "\033[106m",
-    type: "bg",
-    name: "cyan",
-    formatting: "\033[30m"
-  },
-
-  {
-    code: "\033[49m",
-    type: "bg",
-    name: "default"
-  },
-
-  {
-    code: "\033[0m",
+    fg: 0,
     name: "reset"
   }
-
-
 ];
+
+to_export.console_colors = console_colors;
 
 //-----------------------------------------
 //generate global ANSI codes
 
-  for (var i=0;i<console_colors.length;i++){
-    var cc = console_colors[i];
-    var this_code = (cc.type ? cc.type+"_" : "") + cc.name.replace(/\s/g,"_");
-    to_export[this_code] = cc.code
-  }
-
+for (var i=0;i<console_colors.length;i++){
+	const cc = console_colors[i];
+	const name = cc.name.replace(/\s/g,"_");
+	if(!cc.bg || !cc.fg) {
+		to_export[name] = cc.bg || cc.fg;
+		continue;
+	}
+	if (cc.fg) {to_export[`fg_${name}`] = cc.fg}
+	if (cc.bg) {to_export[`bg_${name}`] = cc.bg}
+	if (cc.set) {to_export[`set_fg_${name}`] = cc.set}
+}
 
 //-----------------------------------------
 
@@ -228,53 +142,85 @@ function listColors(){
 /*
 List the color codes available to color console.log statements.
 */
-  console.log("\n\n Console log color List:\n\n")
+  console.log("\n\n Console log color List:\n");
 
-  var lines = []
+  var fg_lines = [];
+  var bg_lines = [];
+
   var max_length = 0;
   for (var i=0;i<console_colors.length;i++){
     var cc = console_colors[i];
-    cc.codename = (cc.type ? cc.type+"_" : "") + (cc.name.replace(/\s/g,"_"));
-    cc.c_text = (cc.type === "fg" ? "foreground " : cc.type === "bg" ? "background " : "") + (cc.name.replace(/\s/g,"_"));
-    if (cc.c_text.length > max_length){max_length = cc.c_text.length}
+
+		if (!cc.fg || !cc.bg) {
+			continue;
+		}
+    let fg_name = `fg_${cc.name.replace(/\s/g,"_")}`;
+		let bg_name = `bg_${cc.name.replace(/\s/g,"_")}`;
+
+		const fg_text = `Foreground ${cc.name}`;
+		const bg_text = `Background ${cc.name}`;
+
+		max_length = Math.max(max_length, fg_text.length, bg_text.length);
+
+    fg_lines.push({
+			name:fg_name,
+			text: fg_text,
+			colored: cc.list_bg ? setColors(cc.list_bg, fg_name, fg_text) : setColors(fg_name, fg_text)
+		});
+
+		bg_lines.push({
+			name: bg_name,
+			text: bg_text,
+			colored: cc.list_fg ? setColors(cc.list_fg, bg_name, bg_text) : setColors(bg_name, bg_text)
+		});
   }
 
-  for (var i=0;i<console_colors.length;i++){
-    var cc = console_colors[i];
+  fg_lines.forEach(cc => {
+    const tabs_len  = (max_length - Math.floor(cc.text.length));
+    const tabs      = " ".repeat( tabs_len + 1 );
+    console.log(`  ${cc.colored}${tabs}\u001b[0m: ${cc.name}`)
+  });
+	console.log('');
+  bg_lines.forEach(cc => {
+    const tabs_len  = (max_length - Math.floor(cc.text.length));
+    const tabs      = " ".repeat( tabs_len + 1 );
+    console.log(`  ${cc.colored}${tabs}\u001b[0m: ${cc.name}`)
+  });
+	console.log('');
 
-    var tabs_len  = (max_length - Math.floor(cc.c_text.length));
-    var tabs      = " ".repeat( tabs_len+1 );
-
-    console.log(to_export.reset + "  ", (cc.norender ? "" : cc.code) + (cc.formatting ? cc.formatting : "") + cc.c_text + to_export.reset + tabs + ": "+cc.codename)
-  }
-
-  console.log(to_export.reset)
 }
 
 //-----------------------------------------
 
-function setColors(){
-  var colors = []
-  for (var i=0;i<arguments.length-1;i++){
-    colors.push(to_export[arguments[i]])
-  }
-  return colors.join("") + arguments[arguments.length-1] + to_export.reset
+function setColors(...argu){
+	const args = [...argu];
+
+  const fg_color = args.map(s => {
+		return String(s).match(/^fg_/) !== null ? s : undefined;
+	}).filter(s => {
+		return !!s;
+	})[0];
+
+  const bg_color = args.map(s => {
+		return String(s).match(/^bg_/) !== null ? s : undefined;
+	}).filter(s => {
+		return !!s;
+	})[0];
+
+	const text = args.map(s => {
+		return String(s).match(/^fg_/) === null && String(s).match(/^bg_/) === null ? s : ''
+	}).filter(s => {
+		return !!s;
+	}).join(' ');
+
+	const set = to_export[`set_${fg_color}`] ? to_export[`set_${fg_color}`] : 0 ;
+
+	const colors = `\u001b[${set ? set + ';' : ''}${fg_color ? to_export[fg_color] + (bg_color ? ';' : '') : ''}${bg_color ? to_export[bg_color]  : ''}m`
+
+  return colors + text + `\u001b[${to_export.reset}m`;
 }
 
 //-----------------------------------------
-var gulp
-try{
-	gulp = require("gulp")
-
-	if (gulp && gulp.task){
-		gulp.task('listcolors',function(){
-	/*
-	List the color codes available to color console.log statements.
-	*/
-	  	listColors();
-		})
-	}
-}catch(e){}
 
 if (process.argv.indexOf('--LISTCOLORS')!==-1) {
 	listColors();
