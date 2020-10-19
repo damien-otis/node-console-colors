@@ -5,26 +5,20 @@
   "main": "index.js",
   "scripts": {
     "test": "node ./test.js",
-		"listcolors": "node ./index.js"
+    "listcolors": "node ./index.js"
   },
   "keywords": [
-    "nodejs",
-    "ANSI",
     "color",
-		"console"
+    "colors",
+    "colorize",
+    "ansi",
+    "terminal"
   ],
   "author": "Damien Otis",
-	"license": "MIT",
- 	"homepage": "https://github.com/damien-otis/node-console-colors",
-	"keywords": [
-			"color",
-			"colors",
-			"colorize",
-			"ansi",
-			"terminal"
-	],
-	"repository": {
-			"type": "git",
-			"url": "https://github.com/damien-otis/node-console-colors"
-	}
+  "license": "MIT",
+  "homepage": "https://github.com/damien-otis/node-console-colors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/damien-otis/node-console-colors"
+  }
 }
