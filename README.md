@@ -2,8 +2,8 @@ node-console-colors adds ANSI coloring to the nodejs console.log output.
 
 Install:
 
-npm install --save console-colors
-
+npm install --save node-console-colors
+yarn add node-console-colors
 
 Usage:
 
@@ -20,8 +20,5 @@ To list all the colors:
 
     node ./node_modules/node-console-colors/index.js
 
-Known issues:
-
-Windows, OSX, and MinGW/Msys32 will show all colors, but Linux may show fewer colors.
 
 ![alt tag](https://dmtmix.com/dnetAPI/getImage/console_colors.png)
