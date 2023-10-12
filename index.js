@@ -28,6 +28,8 @@ module.exports = {
 	rgbf: (r,g,b)=>setRGBColors(r,g,b,false),
 	rgbb: (r,g,b)=>setRGBColors(r,g,b,true),
 	hsl: setHSLColors,
+	hslf: (h,s,l)=>setRGBColors(h,s,l,false),
+	hslb: (h,s,l)=>setRGBColors(h,s,l,true),
 	colors: {
 		colorNamesBasic,
 		moreColorNames,

@@ -73,7 +73,7 @@ console.log('\n')
 console.log("HSL Rainbow Gradient:")
 let grad2 = [];
 for (var i=0,h=0;i<63;i+=1,h+=1/64){
-	grad2.push(`${cc.hsl(h,1,0.5)}${cc.hsl(1-h,1,0.5,true)}*`)
+	grad2.push(`${cc.hslf(h,1,0.5)}${cc.hslb(1-h,1,0.5)}*`)
 }
 console.log(grad2.join(''), cc.reset)
 
