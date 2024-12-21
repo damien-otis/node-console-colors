@@ -1,19 +1,21 @@
-const {
-  colorNamesBasic,
-  colorNames256,
-  moreColorNames,
+import {
+	colorNamesBasic,
+	colorNames256,
+	moreColorNames,
 	ansiSpecial
-} = require('./color-names.js');
+} from './color-names.js';
 
-const {	
+import {	
 	HSLtoRGB,
 	RGBtoHSL,
 	deltaE
-} = require('./rgb.js')
+} from './rgb.js';
+
+import ansiEscapes from './ansi-escapes.js'
 
 //---------------------------------------------------------------
 
-const {hasBasic, has256, has16m} =  require('./supports-color.js');
+import {hasBasic, has256, has16m} from './supports-color.js';
 
 const isBasic = !has256 && !has16m;
 const is256 = has256 && !has16m;
@@ -21,33 +23,9 @@ const is16m = has16m;
 
 //---------------------------------------------------------------
 
-module.exports = {
-	list,
-  set: setColors,
-	rgb: setRGBColors,
-	rgbf: (r,g,b)=>setRGBColors(r,g,b,false),
-	rgbb: (r,g,b)=>setRGBColors(r,g,b,true),
-	hsl: setHSLColors,
-	hslf: (h,s,l)=>setRGBColors(h,s,l,false),
-	hslb: (h,s,l)=>setRGBColors(h,s,l,true),
-	colors: {
-		colorNamesBasic,
-		moreColorNames,
-		colorNames256,
-		ansiSpecial
-	},
-	support: {isBasic, is256, is16m, support:isBasic?'isBasic':is256?'is256':is16m?'is16m':'unknown'},
-	utils:{	
-		HSLtoRGB,
-		RGBtoHSL,
-		deltaE
-	},
-	gradient
-}
-
-//---------------------------------------------------------------
-
 const reset = ansiSpecial.filter(o=>o.name==='reset')[0].ansi;
+const clear = '\x1B[1;1f';
+const clearAll = '\x1B[1;1f\x1Bc';
 const fg_default = '\x1B[39m';
 const bg_default = '\x1B[49m';
 
@@ -56,39 +34,84 @@ const bg_default = '\x1B[49m';
 function gradient(obj){
 	const text_arr = obj.text.split('');
 	const len = text_arr.length;
-	var fg_rgb;
-	var bg_rgb;
-	if (obj.fg1 && obj.fg2){
-		const fg_hsl1 = RGBtoHSL(obj.fg1.r, obj.fg1.g, obj.fg1.b);
-		const fg_hsl2 = RGBtoHSL(obj.fg2.r, obj.fg2.g, obj.fg2.b);
-		fg_rgb = [];
-		for (let i=0;i < len;i++){
-			const this_h = fg_hsl1.h + (((fg_hsl2.h - fg_hsl1.h) / len) * i);
-			const this_s = fg_hsl1.s + (((fg_hsl2.s - fg_hsl1.s) / len) * i);
-			const this_l = fg_hsl1.l + (((fg_hsl2.l - fg_hsl1.l) / len) * i);
-			const this_rgb = HSLtoRGB(this_h, this_s, this_l);
-			fg_rgb.push(this_rgb)
-		}
+	var fg_rgb = [];
+	var bg_rgb = [];
+
+	if (obj.fg && obj.fg.constructor === Array){
+		fg_rgb = colorGradient(obj.fg, len);
 	}
-	if (obj.bg1 && obj.bg2){
-		const bg_hsl1 = RGBtoHSL(obj.bg1.r, obj.bg1.g, obj.bg1.b);
-		const bg_hsl2 = RGBtoHSL(obj.bg2.r, obj.bg2.g, obj.bg2.b);
-		bg_rgb = [];
-		for (let i=0;i < len;i++){
-			const this_h = bg_hsl1.h + (((bg_hsl2.h - bg_hsl1.h) / len) * i);
-			const this_s = bg_hsl1.s + (((bg_hsl2.s - bg_hsl1.s) / len) * i);
-			const this_l = bg_hsl1.l + (((bg_hsl2.l - bg_hsl1.l) / len) * i);
-			const this_rgb = HSLtoRGB(this_h, this_s, this_l);
-			bg_rgb.push(this_rgb)
-		}
+	if (obj.bg && obj.bg.constructor === Array){
+		bg_rgb = colorGradient(obj.bg, len);
 	}
 
 	return text_arr.map((char,i)=>{
-		const fgc = fg_rgb ? getAdjustedColor({rgb:fg_rgb[i]}).fg : ''
-		const bgc = bg_rgb ? getAdjustedColor({rgb:bg_rgb[i]}).bg : ''
+		const fgc = fg_rgb && fg_rgb[i] ? getAdjustedColor({rgb:fg_rgb[i]}).fg : ''
+		const bgc = bg_rgb && bg_rgb[i] ? getAdjustedColor({rgb:bg_rgb[i]}).bg : ''
 		return `${fgc}${bgc}${char}`
 	}).join('')+reset;
 
+}
+
+//---------------------------------------------------------------
+
+function colorGradient(grad, len){
+	
+	grad.sort((a,b)=>{
+		return a.offset > b.offset ? 1 : a.offset < b.offset ? -1 : 0;
+	});
+
+	if (grad[0].offset === undefined){
+		grad.forEach((o,i)=>{
+			o.offset = (1 / (grad.length-1)) * i;
+		});
+	}
+
+	return grad.reduce((a, color, idx)=>{
+		if (color.offset === undefined){return a}
+		const c1 = color.r !== undefined &&
+			color.g !== undefined &&
+			color.b !== undefined ?
+				RGBtoHSL(color.r, color.g, color.b) : color;
+
+		let nextColor = grad[idx+1];
+		if (nextColor === undefined){
+			nextColor = {h:c1.h, s:c1.s, l: c1.l, offset: 1}
+		} else {
+			if (nextColor.offset === undefined){
+				return a
+			}
+		}
+
+		const c2 = nextColor.r !== undefined &&
+			nextColor.g !== undefined &&
+			nextColor.b !== undefined ? 
+				RGBtoHSL(nextColor.r, nextColor.g, nextColor.b) : nextColor;
+
+		const dist = (nextColor.offset - color.offset);
+
+		const steps = Math.round(dist * len);
+		
+		const inc = dist / steps;
+
+		const h_dist = c2.h - c1.h;
+		const s_dist = c2.s - c1.s;
+		const l_dist = c2.l - c1.l;
+
+		const h_inc = h_dist / steps;
+		const s_inc = s_dist / steps;
+		const l_inc = l_dist / steps;
+		
+		for (let i=1;i<steps;i++){
+			const h = c1.h + (h_inc * i);
+			const s = c1.s + (s_inc * i);
+			const l = c1.l + (l_inc * i);
+			const this_rgb = HSLtoRGB(h, s, l);
+			a.push(this_rgb)
+		}
+
+		
+		return a
+	},[])	
 }
 
 //---------------------------------------------------------------
@@ -144,22 +167,8 @@ function getAdjustedColor(c){
 const allColors = colorNamesBasic.concat(colorNames256, moreColorNames).reduce((a,o)=>{
 	a[o.name] = o.rgb
 	const c = getAdjustedColor({rgb:o.rgb, name: o.name});
-	module.exports[`fg_${o.name}`] = c.fg;
-	module.exports[`bg_${o.name}`] = c.bg;
-	module.exports[`_fg_${o.name}`] = c.fg;
-	module.exports[`_bg_${o.name}`] = c.bg;
 	return a
  },{});
-
- module.exports[`reset`] = reset;
- module.exports[`fg_default`] = fg_default;
- module.exports[`bg_default`] = bg_default;
- module.exports[`_fg_default`] = fg_default;
- module.exports[`_bg_default`] = bg_default;
- ansiSpecial.forEach(o=>{
-	module.exports[`${o.name}`] = o.ansi;
-	module.exports[`cc_${o.name}`] = o.ansi;
- })
 
  //---------------------------------------------------------------
 
@@ -263,6 +272,55 @@ function setHSLColors(h, s, l, bg){
 
 //-----------------------------------------------------------------------------------
 
-if (!module.parent){
-	list()
+
+const exports = {
+	list,
+	set: setColors,
+	rgb: setRGBColors,
+	rgbf: (r,g,b)=>setRGBColors(r,g,b,false),
+	rgbb: (r,g,b)=>setRGBColors(r,g,b,true),
+	hsl: setHSLColors,
+	hslf: (h,s,l)=>setHSLColors(h,s,l,false),
+	hslb: (h,s,l)=>setHSLColors(h,s,l,true),
+	colors: {
+		colorNamesBasic,
+		moreColorNames,
+		colorNames256,
+		ansiSpecial
+	},
+	support: {isBasic, is256, is16m, support:isBasic?'isBasic':is256?'is256':is16m?'is16m':'unknown'},
+	utils:{	
+		HSLtoRGB,
+		RGBtoHSL,
+		deltaE
+	},
+	gradient,
+	moveTo: (x = 0, y = 0) => {
+	//	return `\x1B[<${y}>;<${x}>H`;
+		return `\x1b[${y};${x}f`;
+	},
+	ansiEscapes,
+	reset,
+	clear,
+	clearAll,
+	fg_default,
+	bg_default,
+	_fg_default: fg_default,
+	_bg_default: bg_default,
+
 }
+
+colorNamesBasic.concat(colorNames256, moreColorNames).forEach((o)=>{
+	const c = getAdjustedColor({rgb:o.rgb, name: o.name});
+	exports[`fg_${o.name}`] = c.fg;
+	exports[`bg_${o.name}`] = c.bg;
+	exports[`_fg_${o.name}`] = c.fg;
+	exports[`_bg_${o.name}`] = c.bg;
+ });
+
+ ansiSpecial.forEach(o=>{
+	exports[`${o.name}`] = o.ansi;
+	exports[`cc_${o.name}`] = o.ansi;
+ })
+
+export default exports

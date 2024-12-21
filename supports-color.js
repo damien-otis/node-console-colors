@@ -1,8 +1,8 @@
 //Forked from https://github.com/chalk/supports-color
 
-const process = require('process');
-const os = require('os');
-const tty = require('tty');
+import process from 'process';
+import os from 'os';
+import tty from  'tty';
 
 // From: https://github.com/sindresorhus/has-flag/blob/main/index.js
 function hasFlag(flag, argv = globalThis.Deno ? globalThis.Deno.args : process.argv) {
@@ -184,8 +184,6 @@ const supportsColor = {
 	stderr: createSupportsColor({isTTY: tty.isatty(2)}),
 };
 
-module.exports = {
-	hasBasic: supportsColor.stdout.hasBasic && supportsColor.stderr.hasBasic,
-	has256: supportsColor.stdout.has256 && supportsColor.stderr.has256,
-	has16m: supportsColor.stdout.has16m && supportsColor.stderr.has16m
-}
+export const hasBasic = supportsColor.stdout.hasBasic && supportsColor.stderr.hasBasic;
+export const has256 = supportsColor.stdout.has256 && supportsColor.stderr.has256;
+export const has16m = supportsColor.stdout.has16m && supportsColor.stderr.has16m;

@@ -69,7 +69,7 @@ function hueToRgb(p, q, t) {
 
 //--------------------------------------------------------------------------
 
-function deltaE(rgbA, rgbB) {
+export function deltaE(rgbA, rgbB) {
   let labA = rgb2lab(rgbA);
   let labB = rgb2lab(rgbB);
   let deltaL = labA[0] - labB[0];
@@ -106,9 +106,5 @@ function rgb2lab(rgb){
 }
 
 //--------------------------------------------------------------------------
-
-module.exports = {
-	HSLtoRGB: hslToRgb,
-	RGBtoHSL: rgbToHsl,
-	deltaE
-}
+export const HSLtoRGB = hslToRgb;
+export const RGBtoHSL = rgbToHsl;

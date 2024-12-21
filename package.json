@@ -1,13 +1,14 @@
 {
   "name": "node-console-colors",
-  "version": "1.5.0",
+  "version": "2.0.5",
   "description": "ANSI colors for your cli with no dependencies",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "example": "node example.js"
   },
   "engines": {
-		"node": "^12.17.0 || ^14.13 || >=16.0.0"
+		"node": "^12.17.0 || ^14.13 || >=16.0.0 || >=22.0.0"
 	},
   "sideEffects": false,
   "keywords": [

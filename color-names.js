@@ -1,8 +1,13 @@
-var ansiSpecial = [
+export const ansiSpecial = [
   { 
     name: "reset",
     ansi: "\u001b[0m",
     about: "Resets all styles to default console colors and style"
+  },
+  {
+    name: "clear",
+    ansi: "\u001b[2J",
+    about: "Clear Screen"
   },
   {
     name:"bold",
@@ -48,7 +53,7 @@ var ansiSpecial = [
 ]
 
 //first 16 colors in 16 color mode and 256 color mode
-var colorNamesBasic = [
+export const colorNamesBasic = [
   {
     fg: 30,
 		bg: 40,
@@ -162,7 +167,7 @@ var colorNamesBasic = [
 //https://www.ditig.com/256-colors-cheat-sheet
 //https://talyian.github.io/ansicolors/
 
-var colorNames256 = [
+export const colorNames256 = [
   ...colorNamesBasic,
 
   {"name": "navyblue", rgb:{r:0,g:0,b:95}, "system": true},
@@ -408,7 +413,7 @@ var colorNames256 = [
 
 //-----------------------------------------------------------------
 
-var moreColorNames = [
+export const moreColorNames = [
   //red html color names
   {"name": "indianred", rgb:{r:205, g:92, b:92}},
   {"name": "lightcoral", rgb:{r:240, g:128, b:128}},
@@ -573,9 +578,3 @@ var moreColorNames = [
   {"name": "darkslategray", rgb:{r:47, g:79, b:79}}
 ];
 
-module.exports = {
-  colorNamesBasic,
-  colorNames256,
-  moreColorNames,
-  ansiSpecial
-}
