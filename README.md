@@ -12,3 +12,6 @@ Also run example_anim.js to see what a CLI can do with color.
 
 
 ![alt tag](https://dmtmix.com/dnetAPI/getImage/console_colors.png)
+
+![alt tag](https://dmtmix.com/circle.svg)
+
